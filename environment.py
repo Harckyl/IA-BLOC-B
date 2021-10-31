@@ -16,7 +16,7 @@ board = [
 
 #fonctionnement = variable = 1 ==> tableau[0][1]
 #variable = 10 ==> tableau[1][0]
-variable = 77
+variable = 87
 
 def print_board(bo):
     for i in range(len(bo)):
@@ -38,5 +38,60 @@ print_board(board)
 
  
 
-#test = check_constraint(assignement, 9, variable)
-#print(test)
+class Arbre_contrainte:
+   def __init__(self, valeurx, valeury):
+      self.valeurx = valeurx 
+      self.valeury = valeury
+      self.enfant = []
+      self.parent = None
+
+   def insert(self, valeurx, valeury):
+      if self.enfant != None:
+         self.enfant.append(Arbre_contrainte(valeurx, valeury))
+
+   def get_valeurx(self):
+      return self.valeurx
+      
+   def get_valeury(self):
+      return self.valeury
+
+   def get_enfant(self, index):
+      return self.enfant[index]
+
+   def get_nb_enfant(self):
+      return len(self.enfant)
+
+
+def affiche(T):
+   if T != None:
+      return (T.get_valeur(),affiche(T.get_enfant()))
+  
+i = 5
+j = 1
+
+tmp = j * 10
+
+racine = Arbre_contrainte(i, j)
+
+
+carrex = i // 3
+carrey = j // 3
+
+
+for oui in range(carrex*3, carrex*3 + 3):
+    for non in range(carrey * 3, carrey*3 + 3):
+        if ((i, j) != (oui, non)):
+            racine.insert(non, oui)
+
+for increment in range(9):
+    if (increment != j):
+        racine.insert(increment, i)
+    if (increment != i):
+        racine.insert(j, increment)
+    
+
+
+test = 0
+for test in range(racine.get_nb_enfant()):
+    print(racine.get_enfant(test).get_valeurx(), racine.get_enfant(test).get_valeury())
+
