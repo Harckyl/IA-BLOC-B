@@ -1,0 +1,10 @@
+-Arbre de contraintes
+-classe CSP
+->dictionnaire + on peut ajouter des contraintes
+
+-classe de contraintes (où stocker nos variables) + check constraints
+-back-tracking search --MIKE
+
+-> MRV + degré heuristique + AC-3
+
+-possibilité d'ajouter un sudoku
