@@ -36,5 +36,5 @@ test = 0
 for test in range(racine.get_nb_enfant()):
     print(racine.get_enfant(test).get_valeur())
 
-csp = Csp.CSP(0, board)
+csp = Csp.CSP(3, board)
 csp.resolve()

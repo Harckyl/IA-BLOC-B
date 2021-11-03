@@ -64,18 +64,53 @@ class CSP():
         return True
 
     def resolve(self):
-        for x in range(9):
-            for y in range(9):
-                if self.assignement[x][y] == 0:
-                    for value in self.Domain:
-                        if self.check(x,y,value):
-                            self.assignement[x][y] = value
+        if (self.mode_voulu == 0): ##if we use only the backtracking search
+            for x in range(9):
+                for y in range(9):
+                    if self.assignement[x][y] == 0:
+                        for value in self.Domain:
+                            if self.check(x,y,value):
+                                self.assignement[x][y] = value
+                                self.resolve()
+                                self.assignement[x][y] = 0
+                        return
+        if(self.mode_voulu == 3): ##if we use the least constraining value
+            for x in range(9):
+                for y in range(9):
+                    if self.assignement[x][y] == 0: ##doit trier les valeurs des variables possibles pour pouvoir loop dessus dans le bon ordre
+                        Dictionnaire = self.DictLCV(x,y)
+                        while Dictionnaire != {}:
+                            val = min(Dictionnaire, key=Dictionnaire.get)
+                            self.assignement[x][y] = int(val)
+                            del Dictionnaire[val]
                             self.resolve()
                             self.assignement[x][y] = 0
-                    return
+                        return
         self.print_board(self.assignement)
 
+    def DictLCV(self,x,y): ##pour passer les valeurs dans un dictionnaire avec en valeur leurs nombres d'occurence
+        dictionnaire = {}
+        for val in self.Domain:
+            
+            if self.check(x,y,val):
+                compteur = 0
+                for i in range(0,9):
+                    if self.assignement[x][i] == 0 and self.check(x,i,val):
+                        compteur += 1
+                for j in range(0,9):
+                    if self.assignement[j][y] == 0 and self.check(j,y,val):
+                        compteur += 1
+                xx = (x//3)*3
+                yy = (y//3)*3
+                for i in range(0,3):
+                    for j in range(0,3):
+                        if self.assignement[xx+i][yy+j] == 0 and self.check(xx+i,yy+j,val):
+                            compteur += 1
+                
+                dictionnaire[str(val)] = compteur
+                
 
+        return dictionnaire
 
 """     def check_constraint(self, assignement, value, variable):
         i = (int) (variable / 10)
