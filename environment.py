@@ -19,25 +19,10 @@ board = [
 #variable = 10 ==> tableau[1][0]
 variable = 87
 
-def print_board(bo):
-    for i in range(len(bo)):
-        if i % 3 == 0 and i != 0:
-            print("- - - - - - - - - - - - - ")
-
-        for j in range(len(bo[0])):
-            if j % 3 == 0 and j != 0:
-                print(" | ", end="")
-
-            if j == 8:
-                print(bo[i][j])
 
 
-            else:
-                print(str(bo[i][j]) + " ", end="")
 
-print_board(board)
 
- 
   
 
 
@@ -51,3 +36,5 @@ test = 0
 for test in range(racine.get_nb_enfant()):
     print(racine.get_enfant(test).get_valeur())
 
+csp = Csp.CSP(0, board)
+csp.resolve()
