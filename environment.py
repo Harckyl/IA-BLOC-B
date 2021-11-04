@@ -24,4 +24,3 @@ csp = Csp.CSP(1, board)
 
 
 
-csp.resolve()

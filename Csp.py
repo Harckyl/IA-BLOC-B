@@ -43,17 +43,19 @@ class CSP():
             for y in range(9):
                 if (self.assignement[x][y] == 0):
                     node = arb.Arbre_contrainte(y + 10 * x)
-                    node.construct_fils_reverse(self.assignement, x, y)
+                    node.construct_fils_reverse(self.assignement, y, x)
                     variable_domain = self.Domain.copy()
+                    #print(" Position : ", x , y)
                     for enfant in node.get_all_enfant():
+                        #print(enfant.get_valeur(), ' / ')
                         i = enfant.get_valeur() % 10
                         j = (int) (enfant.get_valeur() / 10)
-                        valeur_contrainte = self.assignement[i][j]
+                        valeur_contrainte = self.assignement[j][i]
                         if (valeur_contrainte in variable_domain):
                             variable_domain.remove(valeur_contrainte)
                     tuple = (x, y, variable_domain)
                     self.contrainte.append(tuple) 
-        #self.contrainte = sorted(self.contrainte, key=lambda tup: tup[2])
+        self.contrainte = sorted(self.contrainte, key=lambda tup: tup[2])
 
     def print_board(self, bo):
         for i in range(len(bo)):
