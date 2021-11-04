@@ -18,12 +18,6 @@ board = [
 #variable = 10 ==> tableau[1][0]
 variable = 87
 
-
-
-
-
-  
-
     
 csp = Csp.CSP(1, board)
 

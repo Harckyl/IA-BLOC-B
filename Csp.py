@@ -1,3 +1,4 @@
+from typing import Dict
 import numpy as np
 import arbre_constraint as arb
 class CSP():
@@ -10,6 +11,10 @@ class CSP():
         self.print_board(self.base_sudoku)
         self.compteur = 0
         self.finish = 0
+        self.contrainte = []
+        self.update_contrainte()
+
+        print(self.Domain)
         #self.arbre_constraint
         #self.dictionnary_constraint
 
@@ -31,6 +36,24 @@ class CSP():
             dosoemthing = 0
 
         return 0
+    
+    def update_contrainte(self):
+        self.contrainte.clear()
+        for x in range(9):
+            for y in range(9):
+                if (self.assignement[x][y] == 0):
+                    node = arb.Arbre_contrainte(y + 10 * x)
+                    node.construct_fils_reverse(self.assignement, y , x)
+                    variable_domain = self.Domain
+                    for enfant in node.get_all_enfant():
+                        i = enfant.get_valeur() % 10
+                        j = (int) (enfant.get_valeur() / 10)
+                        valeur_contrainte = self.assignement[i][j]
+                        if (valeur_contrainte in variable_domain):
+                            variable_domain.remove(valeur_contrainte)
+                    tuple = (x, y, variable_domain)
+                    self.contrainte.append(tuple) 
+        self.contrainte = sorted(self.contrainte, key=lambda tup: tup[2])
 
     def print_board(self, bo):
         for i in range(len(bo)):
@@ -94,7 +117,6 @@ class CSP():
         if (self.mode_voulu == 1): ##if we use only the backtracking search
             self.compteur += 1
             variables = self.Dictionnaire_degree_heuristic()
-            print(variables)
             if(variables != []):
                 for variable in variables:
                     y = variable[0] % 10
@@ -107,6 +129,17 @@ class CSP():
                                 return
                             self.assignement[x][y] = 0
                     return
+        if (self.mode_voulu == 0): ##if we use only the backtracking search
+            self.compteur += 1
+            for x in range(9):
+                for y in range(9):
+                    if self.assignement[x][y] == 0:
+                        for value in self.Domain:
+                            if self.check(x,y,value):
+                                self.assignement[x][y] = value
+                                self.resolve()
+                                self.assignement[x][y] = 0
+                        return
         self.print_board(self.assignement)
         print(self.compteur)
         self.finish = 1
@@ -137,6 +170,8 @@ class CSP():
                 
 
         return dictionnaire
+
+
 
     def Dictionnaire_degree_heuristic(self):
       tab = []
