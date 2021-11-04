@@ -1,4 +1,5 @@
 import numpy as np
+import arbre_constraint as arb
 class CSP():
     Domain = [1,2,3,4,5,6,7,8,9]
     def __init__(self,mode_voulu,board):
@@ -7,6 +8,8 @@ class CSP():
         self.assignement = board
         self.unassigned_variable = [[board[i][j] == 0 for i in range(9)] for j in range(9)]
         self.print_board(self.base_sudoku)
+        self.compteur = 0
+        self.finish = 0
         #self.arbre_constraint
         #self.dictionnary_constraint
 
@@ -65,6 +68,7 @@ class CSP():
 
     def resolve(self):
         if (self.mode_voulu == 0): ##if we use only the backtracking search
+            self.compteur += 1
             for x in range(9):
                 for y in range(9):
                     if self.assignement[x][y] == 0:
@@ -75,6 +79,7 @@ class CSP():
                                 self.assignement[x][y] = 0
                         return
         if(self.mode_voulu == 3): ##if we use the least constraining value
+            self.compteur += 1
             for x in range(9):
                 for y in range(9):
                     if self.assignement[x][y] == 0: ##doit trier les valeurs des variables possibles pour pouvoir loop dessus dans le bon ordre
@@ -86,7 +91,28 @@ class CSP():
                             self.resolve()
                             self.assignement[x][y] = 0
                         return
+        if (self.mode_voulu == 1): ##if we use only the backtracking search
+            self.compteur += 1
+            variables = self.Dictionnaire_degree_heuristic()
+            print(variables)
+            if(variables != []):
+                for variable in variables:
+                    y = variable[0] % 10
+                    x = (int) (variable[0] / 10)
+                    for value in self.Domain:
+                        if self.check(x,y,value):
+                            self.assignement[x][y] = value
+                            self.resolve()
+                            if (self.finish == 1):
+                                return
+                            self.assignement[x][y] = 0
+                    return
         self.print_board(self.assignement)
+        print(self.compteur)
+        self.finish = 1
+
+     
+
 
     def DictLCV(self,x,y): ##pour passer les valeurs dans un dictionnaire avec en valeur leurs nombres d'occurence
         dictionnaire = {}
@@ -111,6 +137,22 @@ class CSP():
                 
 
         return dictionnaire
+
+    def Dictionnaire_degree_heuristic(self):
+      tab = []
+      for x in range(9):
+         for y in range(9):
+            if(self.assignement[x][y] == 0):
+               variable = arb.Arbre_contrainte(y + 10 * x)
+               variable.construct_fils(self.assignement,variable.valeur % 10, (int) (variable.valeur / 10))
+               tab.append(tuple([variable.valeur, variable.get_nb_enfant()]))
+      tab = sorted(tab, key=lambda tup: tup[1])
+      if (tab != []):
+        return tab
+      else:
+        return []
+
+
 
 """     def check_constraint(self, assignement, value, variable):
         i = (int) (variable / 10)

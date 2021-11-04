@@ -1,5 +1,4 @@
 import Csp
-import arbre_constraint
 board = [
     [7,8,0,4,0,0,1,2,0],
     [6,0,0,0,7,5,0,0,9],
@@ -25,16 +24,10 @@ variable = 87
 
   
 
-
-racine = arbre_constraint.Arbre_contrainte(35)
-
-racine.construct_fils()
     
+csp = Csp.CSP(1, board)
 
 
-test = 0
-for test in range(racine.get_nb_enfant()):
-    print(racine.get_enfant(test).get_valeur())
 
-csp = Csp.CSP(3, board)
+
 csp.resolve()

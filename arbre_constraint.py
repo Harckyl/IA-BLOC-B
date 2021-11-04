@@ -24,24 +24,24 @@ class Arbre_contrainte:
            tab.append(self.get_enfant(i).get_valeur())
        return tab
        
-   def construct_fils(self):
-       j = (int) (self.valeur / 10)
-       i = self.valeur % 10
+   def construct_fils(self, board, i, j):
        carrex = i // 3
        carrey = j // 3
 
        for oui in range(carrex*3, carrex*3 + 3):
             for non in range(carrey * 3, carrey*3 + 3):
-                if ((i, j) != (oui, non)):
+                if ((i, j) != (oui, non) and board[non][oui] == 0):
                     self.insert(non * 10 + oui)
 
-       mem = self.return_enfant_value()
+      
 
        for increment in range(9):
-            if (increment != j and (increment * 10 + i) not in mem):
-                self.insert(increment * 10 + i)
-            if (increment != i and (j * 10 + increment) not in mem):
-                self.insert(j * 10 + increment)
+            mem = self.return_enfant_value()
+            if (increment != j and (increment * 10 + i) not in mem and board[increment][i] == 0):
+               self.insert(increment * 10 + i)
+            if (increment != i and (j * 10 + increment) not in mem and board[j][increment] == 0):
+               self.insert(j * 10 + increment)
+               
 
 def affiche(T):
    if T != None:
