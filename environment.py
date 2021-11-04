@@ -19,8 +19,8 @@ board = [
 variable = 87
 
     
-csp = Csp.CSP(1, board)
+csp = Csp.CSP(2, board)
 
-
+csp.resolve()
 
 

@@ -14,7 +14,6 @@ class CSP():
         self.contrainte = []
         self.update_contrainte()
 
-        print(self.contrainte)
         #self.arbre_constraint
         #self.dictionnary_constraint
 
@@ -55,7 +54,7 @@ class CSP():
                             variable_domain.remove(valeur_contrainte)
                     tuple = (x, y, variable_domain)
                     self.contrainte.append(tuple) 
-        self.contrainte = sorted(self.contrainte, key=lambda tup: tup[2])
+        self.contrainte = sorted(self.contrainte, key=lambda tup: len(tup[2]))
 
     def print_board(self, bo):
         for i in range(len(bo)):
@@ -131,16 +130,25 @@ class CSP():
                                 return
                             self.assignement[x][y] = 0
                     return
-        if (self.mode_voulu == 0): ##if we use only the backtracking search
+        if (self.mode_voulu == 2): ##if we use only the backtracking search
             self.compteur += 1
             for x in range(9):
                 for y in range(9):
+
                     if self.assignement[x][y] == 0:
-                        for value in self.Domain:
-                            if self.check(x,y,value):
-                                self.assignement[x][y] = value
+                        self.update_contrainte()                    
+                        if (len(self.contrainte[0][2]) == 1):
+                            
+                            col = self.contrainte[0][0]
+                            ligne = self.contrainte[0][1]
+                            self.assignement[col][ligne] = self.contrainte[0][2][0]
+                            
+                        if (self.contrainte[0][2] == []):
+                            return
+                        for value in self.contrainte[0][2]:
+                                self.assignement[col][ligne] = value
                                 self.resolve()
-                                self.assignement[x][y] = 0
+                                self.assignement[col][ligne] = 0
                         return
         self.print_board(self.assignement)
         print(self.compteur)
