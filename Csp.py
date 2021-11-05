@@ -32,7 +32,7 @@ class CSP():
             dosomething = 0
         elif (self.mode_voulu == 4):
             #AC3
-            dosoemthing = 0
+            dosomething = 0
 
         return 0
     
