@@ -196,37 +196,3 @@ class CSP():
         return tab
       else:
         return []
-
-
-
-"""     def check_constraint(self, assignement, value, variable):
-        i = (int) (variable / 10)
-        j = variable % 10
-        for test in range(len(assignement)):
-            #check ligne
-            if (assignement[i][test] == value and i != test):
-                return False
-            #check colonne
-            if (assignement[test][j] == value and i != test):
-                return False
-            #check boite 
-            carre_x = i // 3
-            carre_y = j // 3
-            for oui in range(carre_y*3, carre_y*3 + 3):
-                for non in range(carre_x * 3, carre_x*3 + 3):
-                    if assignement[oui][non] == value and (oui, non) != (i, j):
-                        return False
-        return True """
-
-""" 
-    def resolve(self):
-        for x in range(9):
-            for y in range(9):
-                if self.assignement[x][y] == 0:
-                    for n in range(1,10):
-                        if self.check_constraint(self.assignement,n,y*10+x):
-                            self.assignement[x][y] = n
-                            self.resolve()
-                            self.assignement[x][y] = 0
-        self.print_board(self.assignement) """
-                    
