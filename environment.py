@@ -18,8 +18,8 @@ board = [
 #variable = 10 ==> tableau[1][0]
 variable = 87
 
-    
-csp = Csp.CSP(2, board)
+mode_voulu = 0 ## 0 1 2 ou 3
+csp = Csp.CSP(mode_voulu, board) 
 
 csp.resolve()
 

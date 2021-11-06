@@ -17,24 +17,7 @@ class CSP():
         #self.arbre_constraint
         #self.dictionnary_constraint
 
-    def launch_csp(self):
-        if (self.mode_voulu == 0):
-            #backtracking search
-            dosomething = 0
-        elif (self.mode_voulu == 1):
-            #MRV
-            dosomething = 0
-        elif (self.mode_voulu == 2):
-            #degree heuristic
-            dosomething = 0
-        elif (self.mode_voulu == 3):
-            #leastconstrainingvalue
-            dosomething = 0
-        elif (self.mode_voulu == 4):
-            #AC3
-            dosomething = 0
-
-        return 0
+    
     
     def update_contrainte(self):
         self.contrainte.clear()
@@ -115,26 +98,28 @@ class CSP():
                             self.resolve()
                             self.assignement[x][y] = 0
                         return
-        if (self.mode_voulu == 1): ##if we use only the backtracking search
+        if (self.mode_voulu == 1): ##if we use degree_heuristic
             self.compteur += 1
             variables = self.Dictionnaire_degree_heuristic()
             if(variables != []):
                 for variable in variables:
                     y = variable[0] % 10
                     x = (int) (variable[0] / 10)
+                    
                     for value in self.Domain:
                         if self.check(x,y,value):
+                            self.print_board(self.assignement)
                             self.assignement[x][y] = value
                             self.resolve()
                             if (self.finish == 1):
                                 return
                             self.assignement[x][y] = 0
                     return
-        if (self.mode_voulu == 2): ##if we use only the backtracking search
+        if (self.mode_voulu == 2): ##if we use AC-3
             self.compteur += 1
             for x in range(9):
                 for y in range(9):
-
+                    
                     if self.assignement[x][y] == 0:
                         self.update_contrainte()                    
                         if (len(self.contrainte[0][2]) == 1):
@@ -146,9 +131,10 @@ class CSP():
                         if (self.contrainte[0][2] == []):
                             return
                         for value in self.contrainte[0][2]:
-                                self.assignement[col][ligne] = value
-                                self.resolve()
-                                self.assignement[col][ligne] = 0
+                            self.print_board(self.assignement)
+                            self.assignement[col][ligne] = value
+                            self.resolve()
+                            self.assignement[col][ligne] = 0
                         return
         self.print_board(self.assignement)
         print(self.compteur)
